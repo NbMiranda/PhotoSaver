@@ -12,6 +12,14 @@ class User {
     required this.photos,
     required this.index,
   });
+
+  // Método construtor opcional para adicionar um usuário padrão
+  User.defaultUser()
+  : name = 'Default User',
+    email = 'admin',
+    password = '123',
+    photos = [],
+    index = 0;
 }
 
 class UserData {
@@ -24,7 +32,9 @@ class UserData {
     return _instance;
   }
 
-  UserData._internal();
+  UserData._internal() {
+    users.add(User.defaultUser());
+  }
 }
 
 final userData = UserData();

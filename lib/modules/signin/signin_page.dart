@@ -20,6 +20,7 @@ class _SignInPageState extends State<SignInPage> {
 
   bool isButtonEnabled = false;
   bool passwordsMatch = true;
+  bool obscurePassword = true;
 
   @override
   void initState() {
@@ -43,7 +44,17 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   void _registerUser() {
-  if (isButtonEnabled) {
+    if (!isButtonEnabled) {
+      String errorMessage = passwordsMatch ? 'Preencha todos os campos corretamente para cadastrar' : 'As senhas não são iguais';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
     final newUser = User(
       name: _nameController.text,
       email: _emailController.text,
@@ -54,14 +65,11 @@ class _SignInPageState extends State<SignInPage> {
     userData.users.add(newUser);
     controller.login(context);
   }
-}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        
-      ),
+      appBar: appBar(),
       backgroundColor: Colors.white,
       body: body(context),
     );
@@ -69,21 +77,6 @@ class _SignInPageState extends State<SignInPage> {
 
   AppBar appBar() {
     return AppBar(
-      title: Center(
-        child: DropdownButton<String>(
-          value: "Português",
-          style: const TextStyle(color: Colors.grey),
-          underline: Container(height: 0),
-          onChanged: (String? newValue) {},
-          items: <String>['Português', '...']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ),
-      ),
       automaticallyImplyLeading: false,
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -132,12 +125,23 @@ class _SignInPageState extends State<SignInPage> {
                   padding: const EdgeInsets.symmetric(vertical: 6),
                   child: TextField(
                     controller: _passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
+                    obscureText: obscurePassword,
+                    decoration: InputDecoration(
                       labelText: "Senha",
                       hintText: "Digite sua senha",
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(8),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            obscurePassword = !obscurePassword;
+                          });
+                        },
+                        icon: Icon(
+                          obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          color: Colors.grey,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -145,7 +149,7 @@ class _SignInPageState extends State<SignInPage> {
                   padding: const EdgeInsets.symmetric(vertical: 6),
                   child: TextField(
                     controller: _confirmPasswordController,
-                    obscureText: true,
+                    obscureText: obscurePassword,
                     decoration: InputDecoration(
                       labelText: "Confirmar Senha",
                       hintText: "Confirme sua senha",
@@ -161,7 +165,7 @@ class _SignInPageState extends State<SignInPage> {
                     width: double.infinity,
                     height: 38,
                     child: ElevatedButton(
-                      onPressed: isButtonEnabled ? _registerUser : null,
+                      onPressed: _registerUser,
                       child: const Text(
                         "Cadastrar",
                         style: TextStyle(color: Colors.white),
@@ -187,5 +191,4 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
   }
-
 }

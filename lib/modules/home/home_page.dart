@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:instagram_clone_flutter/shared/themes/app_images.dart';
 import './home_controller.dart';
+import '../user/user_controller.dart';
 
 import '../../shared/widget/post_widget.dart';
 import '../../shared/widget/story_widget.dart';
@@ -10,41 +11,41 @@ import '../../shared/widget/story_widget.dart';
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
-  final HomeController controller = HomeController();
+  final HomeController homeController = HomeController();
+  final UserController userController = UserController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
+      appBar: appBar(context),
       body: body(context),
       bottomNavigationBar: bottomNav(context),
     );
   }
 
-  AppBar appBar() {
+  AppBar appBar(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      // title: Image.asset(AppImages.textLogo),
       elevation: 0,
-      backgroundColor: Colors.white,
-      actions: const [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4),
-          child: Icon(
-            FontAwesomeIcons.plusSquare,
-            color: Colors.black,
-          ),
+      backgroundColor: Colors.transparent,
+      title: Text(
+        'PhotoSaver',
+        style: TextStyle(
+          color: Color(0xFF5C0FFF),
+          fontStyle: FontStyle.italic,
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4),
-          child: Icon(
-            FontAwesomeIcons.facebookMessenger,
-            color: Colors.black,
-          ),
+      ),
+      actions: [
+        IconButton(
+          onPressed: () {
+            userController.logout(context);
+          },
+          icon: Icon(Icons.logout, color: Colors.black),
         ),
       ],
     );
   }
+
 
   Widget body(BuildContext context) {
     return SingleChildScrollView(
@@ -55,13 +56,6 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    StoryWidget(image_url: "/images/nathan.jpg"),
-                    StoryWidget(image_url: "/images/luis.png"),
-                    StoryWidget(image_url: "/images/matheus.jpg")
-                  ],
-                ),
                 const Divider(),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -121,10 +115,8 @@ class HomePage extends StatelessWidget {
                   onPressed: () {},
                   icon: const Icon(FontAwesomeIcons.playCircle)),
               IconButton(
-                  onPressed: () {}, icon: const Icon(FontAwesomeIcons.heart)),
-              IconButton(
                   onPressed: () {
-                    controller.profile(context);
+                    homeController.profile(context);
                   }, icon: const Icon(FontAwesomeIcons.user))
 
             ],

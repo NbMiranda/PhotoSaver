@@ -19,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
 
   bool isButtonEnabled = false;
   bool loginFailed = false;
+  bool obscurePassword = true; // Para controlar a visibilidade da senha
 
   @override
   void initState() {
@@ -36,6 +37,16 @@ class _LoginPageState extends State<LoginPage> {
   void _login() {
     final email = _emailController.text;
     final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Preencha todos os campos para entrar'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
 
     final userIndex = userData.users.indexWhere((user) => user.email == email && user.password == password);
 
@@ -109,12 +120,25 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.symmetric(vertical: 6),
                   child: TextField(
                     controller: _passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
+                    obscureText: obscurePassword,
+                    decoration: InputDecoration(
                       labelText: "Senha",
                       hintText: "Digite sua senha",
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(8),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            // Alternar a visibilidade da senha
+                            obscurePassword = !obscurePassword;
+                          });
+                        },
+                        icon: Icon(
+                          // Ícone para exibir ou ocultar a senha
+                          obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          color: Colors.grey,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -122,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      "Usuário não existe",
+                      "Email ou senha incorreto(s)",
                       style: TextStyle(color: Colors.red),
                     ),
                   ),
@@ -132,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                     width: double.infinity,
                     height: 38,
                     child: ElevatedButton(
-                      onPressed: isButtonEnabled ? _login : null,
+                      onPressed: _login, // Removendo a verificação isButtonEnabled
                       child: const Text(
                         "Entrar",
                         style: TextStyle(color: Colors.white),
@@ -176,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                     text: " cadastre-se aqui",
                     style: TextStyle(color: Color(0xFF5C0FFF)),
                     recognizer: TapGestureRecognizer()
-                      ..onTap = () => controller.signIn(context)
+                      ..onTap = () => controller.signIn(context),
                   ),
                 ],
               ),
