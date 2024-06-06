@@ -72,21 +72,6 @@ class _LoginPageState extends State<LoginPage> {
 
   AppBar appBar() {
     return AppBar(
-      title: Center(
-        child: DropdownButton<String>(
-          value: "Português",
-          style: const TextStyle(color: Colors.grey),
-          underline: Container(height: 0),
-          onChanged: (String? newValue) {},
-          items: <String>['Português', '...']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ),
-      ),
       automaticallyImplyLeading: false,
       elevation: 0,
       backgroundColor: Colors.transparent,

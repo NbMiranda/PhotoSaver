@@ -46,7 +46,6 @@ class HomePage extends StatelessWidget {
     );
   }
 
-
   Widget body(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
@@ -62,19 +61,19 @@ class HomePage extends StatelessWidget {
                   child: Column(
                     children: [
                       PostWidget(
-                          user_name: "Neight77",
-                          user_image_url: "/images/nathan.jpg",
-                          post_image_url: "/images/nathan.jpg"
-                        ),
-                      PostWidget(
-                        user_name: "luis_guilherme1996",
-                        user_image_url: "/images/luis.png",
-                        post_image_url: "/images/luis.png"
+                        userName: "Neight77",
+                        userImageUrl: "/images/nathan.jpg",
+                        postImageUrl: "/images/nathan.jpg",
                       ),
                       PostWidget(
-                        user_name: "m.cunha",
-                        user_image_url: "/images/matheus.jpg",
-                        post_image_url: "/images/matheus.jpg"
+                        userName: "luis_guilherme1996",
+                        userImageUrl: "/images/luis.png",
+                        postImageUrl: "/images/luis.png",
+                      ),
+                      PostWidget(
+                        userName: "m.cunha",
+                        userImageUrl: "/images/matheus.jpg",
+                        postImageUrl: "/images/matheus.jpg",
                       ),
                     ],
                   ),
@@ -115,10 +114,8 @@ class HomePage extends StatelessWidget {
                   onPressed: () {},
                   icon: const Icon(FontAwesomeIcons.playCircle)),
               IconButton(
-                  onPressed: () {
-                    homeController.profile(context);
-                  }, icon: const Icon(FontAwesomeIcons.user))
-
+                  onPressed: () {},
+                  icon: const Icon(FontAwesomeIcons.user))
             ],
           )),
     );
