@@ -103,7 +103,9 @@ class HomePage extends StatelessWidget {
                     size: 32,
                   )),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    homeController.newPhoto(context);
+                  },
                   icon: const Icon(FontAwesomeIcons.playCircle)),
               IconButton(
                   onPressed: () {},
