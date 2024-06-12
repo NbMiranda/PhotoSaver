@@ -1,3 +1,4 @@
+import 'package:cloudinary_flutter/image/cld_image.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone_flutter/modules/login/login_page.dart';
 import 'package:instagram_clone_flutter/modules/splash/splash_controller.dart';
@@ -15,10 +16,9 @@ class SplashPage extends StatelessWidget {
     return Stack(
       children: [
         Center(
-            child: Image.asset(
-          AppImages.logo,
-          height: 128,
-        ))
+          child: CldImageWidget(
+            publicId: AppImages.logo,
+        )),
       ],
     );
   }

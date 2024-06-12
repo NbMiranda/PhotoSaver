@@ -1,7 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:instagram_clone_flutter/shared/themes/app_images.dart';
+import '../user/user_data.dart';
 import './home_controller.dart';
 import '../user/user_controller.dart';
 
@@ -48,42 +50,32 @@ class HomePage extends StatelessWidget {
 
   Widget body(BuildContext context) {
     return SingleChildScrollView(
-      child: Container(
-        color: Colors.white,
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                const Divider(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Column(
-                    children: [
-                      PostWidget(
-                        userName: "Neight77",
-                        userImageUrl: "/images/nathan.jpg",
-                        postImageUrl: "/images/nathan.jpg",
-                      ),
-                      PostWidget(
-                        userName: "luis_guilherme1996",
-                        userImageUrl: "/images/luis.png",
-                        postImageUrl: "/images/luis.png",
-                      ),
-                      PostWidget(
-                        userName: "m.cunha",
-                        userImageUrl: "/images/matheus.jpg",
-                        postImageUrl: "/images/matheus.jpg",
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+    child: Container(
+      color: Colors.white,
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              const Divider(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Column(
+                  children: userData.users.where((user) => user.index != 0).map((user) {
+                    return PostWidget(
+                      userName: user.name,
+                      userImageUrl: user.profilePhoto,
+                      postImageUrl: user.photos.isNotEmpty ? user.photos[0]['url'] : '',
+                    );
+                  }).toList(),
+                ),
+              )
+            ],
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 
   Widget bottomNav(BuildContext context) {

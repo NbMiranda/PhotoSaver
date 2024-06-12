@@ -1,4 +1,4 @@
 class AppImages{
-  static const String logo = "/images/logo.png";
-  static const String textLogo = "/images/text_logo.png";
+  static const String logo = "ph05xan6qtq84iywjk5t";
+  static const String textLogo = "gbasht5qqooiy4hrpkp1";
 }

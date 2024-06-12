@@ -1,3 +1,4 @@
+import 'package:cloudinary_flutter/image/cld_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone_flutter/shared/themes/app_images.dart';
@@ -84,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(AppImages.textLogo),
+          CldImageWidget(publicId: AppImages.textLogo),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 48),
             child: Column(

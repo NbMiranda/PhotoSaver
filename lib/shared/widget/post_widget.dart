@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:cloudinary_flutter/image/cld_image.dart';
+import 'package:cloudinary_url_gen/asset/cld_image.dart';
+
 class PostWidget extends StatefulWidget {
   final String userImageUrl;
   final String userName;
@@ -36,7 +39,10 @@ class _PostWidgetState extends State<PostWidget> {
                     borderRadius: BorderRadiusDirectional.circular(24),
                   ),
                   child: FittedBox(
-                    child: Image.asset(widget.userImageUrl),
+                    // child: Image.asset(widget.userImageUrl),
+                    child: CldImageWidget(
+                      publicId: widget.userImageUrl,
+                    ),
                     fit: BoxFit.cover,
                   )),
               Padding(
@@ -54,7 +60,9 @@ class _PostWidgetState extends State<PostWidget> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 4),
-            child: Image.asset(widget.postImageUrl),
+            child: CldImageWidget(
+              publicId: widget.postImageUrl,
+            ),
           ),
           Row(
             children: [

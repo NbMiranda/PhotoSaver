@@ -61,6 +61,7 @@ class _SignInPageState extends State<SignInPage> {
       password: _passwordController.text,
       photos: [],
       index: userData.users.length,
+      profilePhoto: "bfgkxpiokdwbzkrirzj3",
     );
     userData.users.add(newUser);
     controller.login(context);
@@ -69,7 +70,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
+      appBar: AppBar(),
       backgroundColor: Colors.white,
       body: body(context),
     );
