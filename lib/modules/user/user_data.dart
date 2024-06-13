@@ -43,7 +43,15 @@ class UserData {
         email: "luis@example.com",
         password: "password123",
         photos: [
-          {"url": "vzda5jm6aieo35hwq0wq"}
+          {
+            "url": "vzda5jm6aieo35hwq0wq",
+            "comments": [
+              {
+                "userIndex": 3,
+                "comment": "Lindo demais"
+              }
+            ]
+          }
         ],
         index: 1,
         profilePhoto: "vzda5jm6aieo35hwq0wq",
@@ -53,7 +61,15 @@ class UserData {
         email: "matheus@example.com",
         password: "password123",
         photos: [
-          {"url": "ruparzailraxzs46ya1f"}
+          {
+            "url": "ruparzailraxzs46ya1f",
+            "comments": [
+              {
+                "userIndex": 2,
+                "comment": "Lindo demais"
+              }
+            ]
+          }
         ],
         index: 2,
         profilePhoto: "ruparzailraxzs46ya1f",
@@ -63,7 +79,15 @@ class UserData {
         email: "nathan@example.com",
         password: "password123",
         photos: [
-          {"url": "txcdpkllf6amgi8hagml"}
+          {
+            "url": "txcdpkllf6amgi8hagml",
+            "comments": [
+              {
+                "userIndex": 1,
+                "comment": "Lindo demais"
+              }
+            ]
+          }
         ],
         index: 3,
         profilePhoto: "txcdpkllf6amgi8hagml",
