@@ -63,6 +63,7 @@ class HomePage extends StatelessWidget {
                           userName: user.name,
                           userImageUrl: user.profilePhoto,
                           postImageUrl: photo['url'],
+                          userIndex: user.index
                         );
                       }).toList();
                     }).toList(),
@@ -95,7 +96,9 @@ class HomePage extends StatelessWidget {
               padding: EdgeInsets.all(0),
             ),
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  homeController.listUsers(context);
+                },
                 icon: const Icon(
                   Icons.search,
                   size: 32,
