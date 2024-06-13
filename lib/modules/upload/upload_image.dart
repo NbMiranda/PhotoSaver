@@ -3,26 +3,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import '../home/home_page.dart';
+import '../user/user_data.dart';
 
-class UploadImage extends StatelessWidget {
+class UploadImage extends StatefulWidget {
+  UploadImage({Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Photo Upload to Cloudinary',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(),
-    );
-  }
+  _UploadImageState createState() => _UploadImageState();
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _UploadImageState extends State<UploadImage> {
   File? _image;
 
   final ImagePicker _picker = ImagePicker();
@@ -34,37 +25,39 @@ class _MyHomePageState extends State<MyHomePage> {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
       } else {
-        print('No image selected.');
+        print('Nenhuma imagem selecionada.');
       }
     });
   }
 
   Future<void> _uploadImageToCloudinary() async {
     if (_image == null) return;
-
-    // Replace these with your Cloudinary credentials
     String cloudName = 'dcaufvn3n';
-    String apiKey = '423469859132672';
-    String uploadPreset = 'ovOFCG1X_3EG0_X8WVotYqa0wR4';
+    String uploadPreset = 'qs0yyidb';
 
-    var url = Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload');
-    var request = http.MultipartRequest('POST', url);
+    final url = Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/upload');
 
-    request.fields['upload_preset'] = uploadPreset;
-    request.fields['api_key'] = apiKey;
-    request.files.add(await http.MultipartFile.fromPath('file', _image!.path));
-
-    var response = await request.send();
+    final request = http.MultipartRequest('POST', url)
+      ..fields['upload_preset'] = uploadPreset
+      ..files.add(await http.MultipartFile.fromPath('file', _image!.path));
+    
+    final response = await request.send();
     if (response.statusCode == 200) {
-      // Process successful upload
-      var responseData = await response.stream.toBytes();
-      var responseString = String.fromCharCodes(responseData);
-      var parsedJson = json.decode(responseString);
-      print(parsedJson);
-      // Handle the response data as needed
+      final responseData = await response.stream.toBytes();
+      final responseString = String.fromCharCodes(responseData);
+      final jsonMap = jsonDecode(responseString);
+
+      final currentUser = userData.users[userData.currentUserIndex];
+      currentUser.photos.insert(
+        0, {"url": jsonMap['public_id']}
+      );
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
     } else {
-      // Handle failed upload
-      print('Failed to upload image: ${response.statusCode}');
+      print('Erro ao fazer upload da imagem.');
     }
   }
 
@@ -72,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // title: Text('Photo Upload to Cloudinary'),
+        title: Text('Photo Upload to Cloudinary'),
       ),
       body: Center(
         child: Column(

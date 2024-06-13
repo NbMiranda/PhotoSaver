@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-// import 'package:instagram_clone_flutter/user/user_data.dart';
 import 'user_data.dart';
 
 class UserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-   
     final currentUser = userData.users[userData.currentUserIndex];
 
     return Scaffold(

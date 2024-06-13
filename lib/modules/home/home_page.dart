@@ -1,14 +1,10 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:instagram_clone_flutter/shared/themes/app_images.dart';
 import '../user/user_data.dart';
 import './home_controller.dart';
 import '../user/user_controller.dart';
 
 import '../../shared/widget/post_widget.dart';
-import '../../shared/widget/story_widget.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
@@ -50,68 +46,73 @@ class HomePage extends StatelessWidget {
 
   Widget body(BuildContext context) {
     return SingleChildScrollView(
-    child: Container(
-      color: Colors.white,
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              const Divider(),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Column(
-                  children: userData.users.where((user) => user.index != 0).map((user) {
-                    return PostWidget(
-                      userName: user.name,
-                      userImageUrl: user.profilePhoto,
-                      postImageUrl: user.photos.isNotEmpty ? user.photos[0]['url'] : '',
-                    );
-                  }).toList(),
+      child: Container(
+        color: Colors.white,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                const Divider(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Column(
+                    children: userData.users.where((user) => user.index != 0).expand((user) {
+                      return user.photos.map((photo) {
+                        return PostWidget(
+                          userName: user.name,
+                          userImageUrl: user.profilePhoto,
+                          postImageUrl: photo['url'],
+                        );
+                      }).toList();
+                    }).toList(),
+                  ),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ),
-    ),
-  );
+    );
   }
 
   Widget bottomNav(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: Colors.grey))
+          border: Border(top: BorderSide(color: Colors.grey))
       ),
       child: BottomAppBar(
-          elevation: 0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
+        elevation: 0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.home_outlined,
+                size: 32,
+              ),
+              padding: EdgeInsets.all(0),
+            ),
+            IconButton(
                 onPressed: () {},
                 icon: const Icon(
-                  Icons.home_outlined,
+                  Icons.search,
                   size: 32,
-                ),
-                padding: EdgeInsets.all(0),
-              ),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.search,
-                    size: 32,
-                  )),
-              IconButton(
-                  onPressed: () {
-                    homeController.newPhoto(context);
-                  },
-                  icon: const Icon(FontAwesomeIcons.playCircle)),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(FontAwesomeIcons.user))
-            ],
-          )),
+                )),
+            IconButton(
+                onPressed: () {
+                  homeController.newPhoto(context);
+                },
+                icon: const Icon(FontAwesomeIcons.playCircle)),
+            IconButton(
+                onPressed: () {
+                  homeController.profile(context);
+                },
+                icon: const Icon(FontAwesomeIcons.user))
+          ],
+        ),
+      ),
     );
   }
 }
