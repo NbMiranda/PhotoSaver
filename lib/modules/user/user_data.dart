@@ -43,8 +43,7 @@ class UserData {
         email: "luis@example.com",
         password: "password123",
         photos: [
-          {"url": "vzda5jm6aieo35hwq0wq"},
-          {"url": "hzsplsq3apwzbkur8ozt"}
+          {"url": "vzda5jm6aieo35hwq0wq"}
         ],
         index: 1,
         profilePhoto: "vzda5jm6aieo35hwq0wq",
@@ -54,8 +53,7 @@ class UserData {
         email: "matheus@example.com",
         password: "password123",
         photos: [
-          {"url": "ruparzailraxzs46ya1f"},
-          {"url": "j6qxznvfpvkanmhdpucp"}
+          {"url": "ruparzailraxzs46ya1f"}
         ],
         index: 2,
         profilePhoto: "ruparzailraxzs46ya1f",

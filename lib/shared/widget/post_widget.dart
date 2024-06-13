@@ -39,7 +39,6 @@ class _PostWidgetState extends State<PostWidget> {
                     borderRadius: BorderRadiusDirectional.circular(24),
                   ),
                   child: FittedBox(
-                    // child: Image.asset(widget.userImageUrl),
                     child: CldImageWidget(
                       publicId: widget.userImageUrl,
                     ),

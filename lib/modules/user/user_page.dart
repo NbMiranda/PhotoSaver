@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloudinary_flutter/image/cld_image.dart';
 import 'user_data.dart';
 
 class UserPage extends StatelessWidget {
@@ -26,9 +27,10 @@ class UserPage extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundImage: AssetImage('assets/images/default.png'),
+                  CldImageWidget(
+                    publicId: currentUser.profilePhoto,
+                    width: 80, 
+                    height: 80,
                   ),
                   SizedBox(width: 20),
                   Column(
@@ -49,20 +51,34 @@ class UserPage extends StatelessWidget {
               ),
             ),
             Divider(),
-            GridView.builder(
+            ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 2.0,
-                mainAxisSpacing: 2.0,
-              ),
-              itemCount: currentUser.photos.length,
+              itemCount: (currentUser.photos.length / 3).ceil(),
               itemBuilder: (context, index) {
-                final photo = currentUser.photos[index];
-                return Image.network(
-                  photo['url'],
-                  fit: BoxFit.cover,
+                int startIndex = index * 3;
+                int endIndex = startIndex + 3;
+                if (endIndex > currentUser.photos.length) {
+                  endIndex = currentUser.photos.length;
+                }
+
+                List<Map<String, dynamic>> photos = currentUser.photos.sublist(startIndex, endIndex);
+
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: photos.map((photo) {
+                      return Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 4.0),
+                          child: CldImageWidget(
+                            publicId: photo['url'],
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 );
               },
             ),
