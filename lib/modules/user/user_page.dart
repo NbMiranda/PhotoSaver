@@ -37,10 +37,14 @@ class UserPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
-                    CldImageWidget(
-                      publicId: currentUser.profilePhoto,
-                      width: 80,
-                      height: 80,
+                    ClipOval(
+                      child: CldImageWidget(
+                        publicId: currentUser.profilePhoto,
+                        width: 80,
+                        height: 80,
+                        // Defina fit para cover se desejar preencher o círculo completamente
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     SizedBox(width: 20),
                     Column(

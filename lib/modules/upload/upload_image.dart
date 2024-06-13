@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+
 import '../home/home_page.dart';
 import '../user/user_data.dart';
 
@@ -18,8 +20,10 @@ class _UploadImageState extends State<UploadImage> {
 
   final ImagePicker _picker = ImagePicker();
 
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+  bool _isUploading = false;
+
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await _picker.pickImage(source: source);
 
     setState(() {
       if (pickedFile != null) {
@@ -32,6 +36,10 @@ class _UploadImageState extends State<UploadImage> {
 
   Future<void> _uploadImageToCloudinary() async {
     if (_image == null) return;
+    setState(() {
+      _isUploading = true;
+    });
+
     String cloudName = 'dcaufvn3n';
     String uploadPreset = 'qs0yyidb';
 
@@ -40,7 +48,7 @@ class _UploadImageState extends State<UploadImage> {
     final request = http.MultipartRequest('POST', url)
       ..fields['upload_preset'] = uploadPreset
       ..files.add(await http.MultipartFile.fromPath('file', _image!.path));
-    
+
     final response = await request.send();
     if (response.statusCode == 200) {
       final responseData = await response.stream.toBytes();
@@ -48,9 +56,12 @@ class _UploadImageState extends State<UploadImage> {
       final jsonMap = jsonDecode(responseString);
 
       final currentUser = userData.users[userData.currentUserIndex];
-      currentUser.photos.insert(
-        0, {"url": jsonMap['public_id']}
-      );
+      currentUser.photos.insert(0, {"url": jsonMap['public_id']});
+
+      setState(() {
+        _image = null;
+        _isUploading = false;
+      });
 
       Navigator.pushReplacement(
         context,
@@ -58,32 +69,74 @@ class _UploadImageState extends State<UploadImage> {
       );
     } else {
       print('Erro ao fazer upload da imagem.');
+      setState(() {
+        _isUploading = false;
+      });
     }
+  }
+
+  void _deleteImage() {
+    setState(() {
+      _image = null;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Photo Upload to Cloudinary'),
+        title: Text('Nova foto'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            _image == null
-                ? Text('No image selected.')
-                : Image.file(_image!),
-            SizedBox(height: 20),
+            if (_image != null) ...[
+              Stack(
+                alignment: AlignmentDirectional.topEnd,
+                children: [
+                  Image.file(_image!),
+                  IconButton(
+                    onPressed: _deleteImage,
+                    icon: Icon(Icons.close, color: Colors.white),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+            ],
             ElevatedButton(
-              onPressed: _pickImage,
-              child: Text('Take Photo'),
+              onPressed: () => _pickImage(ImageSource.camera),
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF5C0FFF)),
+              ),
+              child: Text('Triar uma foto'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _uploadImageToCloudinary,
-              child: Text('Upload to Cloudinary'),
+              onPressed: () => _pickImage(ImageSource.gallery),
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF5C0FFF)),
+              ),
+              child: Text('Escolher da Galeria'),
             ),
+            SizedBox(height: 20),
+            if (_image != null && !_isUploading) ...[
+              ElevatedButton(
+                onPressed: _uploadImageToCloudinary,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF5C0FFF)),
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                ),
+                child: Text('Upload to Cloudinary'),
+              ),
+            ],
+            if (_isUploading) ...[
+              CircularProgressIndicator(),
+              SizedBox(height: 20),
+              Text('Uploading...'),
+            ],
           ],
         ),
       ),
