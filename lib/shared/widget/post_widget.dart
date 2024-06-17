@@ -98,6 +98,10 @@ class _PostWidgetState extends State<PostWidget> {
                   color: isLiked ? Colors.red : Colors.black,
                 ),
               ),
+              // IconButton(
+              //   onPressed: () {},
+              //   icon: Icon(FontAwesomeIcons.comment),
+              // ),
             ],
           ),
         ],
